@@ -68,7 +68,7 @@ class SignUpSheetController < ApplicationController
       @topic.destroy
       undo_link("The topic: \"#{@topic.topic_name}\" has been successfully deleted. ")
     else
-      flash[:error] = "The topic could not be deleted."
+      flash[:error] = "This topic could not be found." # error message mage more specific
     end
     # changing the redirection url to topics tab in edit assignment view.
     redirect_to edit_assignment_path(params[:assignment_id]) + "#tabs-5"
