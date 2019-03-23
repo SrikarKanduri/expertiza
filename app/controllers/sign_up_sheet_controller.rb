@@ -206,8 +206,10 @@ class SignUpSheetController < ApplicationController
   end
 
   # routes to new page to specficy student
+  # Its just to specify the student, its a get request. Other than that it doesnt do anything. 
   def signup_as_instructor; end
 
+  # its an action that usually follows the aove action, its a post request to signup the student.
   def signup_as_instructor_action
     user = User.find_by(name: params[:username])
     if user.nil? # validate invalid user
