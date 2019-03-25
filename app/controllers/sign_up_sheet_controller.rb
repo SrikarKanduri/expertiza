@@ -107,6 +107,7 @@ class SignUpSheetController < ApplicationController
     SignUpSheet.add_signup_topic(params[:id])
   end
 
+# staggered topics are topics withdifferent deadlines. The purpose is to get the topics and redirect to staggered topics page after redirection.
   def add_signup_topics_staggered
     add_signup_topics
   end
