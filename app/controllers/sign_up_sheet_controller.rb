@@ -150,15 +150,16 @@ class SignUpSheetController < ApplicationController
     redirect_to controller: 'assignments', action: 'edit', id: assignment_id
   end
 
+#this function is to populate the participants assignment details for topic selection
   def list
-    @participant = AssignmentParticipant.find(params[:id].to_i)
-    @assignment = @participant.assignment
-    @slots_filled = SignUpTopic.find_slots_filled(@assignment.id)
-    @slots_waitlisted = SignUpTopic.find_slots_waitlisted(@assignment.id)
+    @participant = AssignmentParticipant.find(params[:id].to_i) # gets the participant
+    @assignment = @participant.assignment			# assignned assignment of the participant
+    @slots_filled = SignUpTopic.find_slots_filled(@assignment.id) # gets the slots filled for theassignment
+    @slots_waitlisted = SignUpTopic.find_slots_waitlisted(@assignment.id) # for topics there will also be waitlisted slots
     @show_actions = true
     @priority = 0
-    @sign_up_topics = SignUpTopic.where(assignment_id: @assignment.id, private_to: nil)
-    @max_team_size = @assignment.max_team_size
+    @sign_up_topics = SignUpTopic.where(assignment_id: @assignment.id, private_to: nil) # get all the available topics of the
+    @max_team_size = @assignment.max_team_size		#max team size allowed for the assignment
     team_id = @participant.team.try(:id)
 
     if @assignment.is_intelligent
@@ -172,12 +173,14 @@ class SignUpSheetController < ApplicationController
       @sign_up_topics -= signed_up_topics
       @bids = signed_up_topics
     end
-
+# get general details about the topic like size, signup deadline, droping deadline etc.
     @num_of_topics = @sign_up_topics.size
     @signup_topic_deadline = @assignment.due_dates.find_by(deadline_type_id: 7)
     @drop_topic_deadline = @assignment.due_dates.find_by(deadline_type_id: 6)
     @student_bids = team_id.nil? ? [] : Bid.where(team_id: team_id)
 
+#staggered deadline referes to topics which can have different deadline
+#get assignments which hasnt exceeded their deadlines
     unless @assignment.due_dates.find_by(deadline_type_id: 1).nil?
       @show_actions = false if !@assignment.staggered_deadline? and @assignment.due_dates.find_by(deadline_type_id: 1).due_at < Time.now
 
